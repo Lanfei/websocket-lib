@@ -1,19 +1,25 @@
-var fs = require('fs');
 var ws = require('../lib/websocket');
-var frame = require('../lib/frame');
 
-var server = ws.createServer(function(session) {
-	console.log('connect');
-	session.on('data', function(data) {
-		console.log('data: ', data);
+var server = ws.createServer(function (session) {
+	console.log('client: connect');
+	session.on('data', function (data) {
+		console.log('client:', data);
 		this.send('Hi, Client!');
 	});
-	session.on('end', function() {
-		console.log('end');
+	session.on('end', function () {
+		console.log('client: end');
 	});
-	session.on('close', function() {
-		console.log('close');
+	session.on('close', function () {
+		console.log('client: close');
 	});
+});
+
+server.on('listening', function () {
+	console.log('server: listening');
+});
+
+server.on('close', function () {
+	console.log('server: close');
 });
 
 server.listen(8000);
