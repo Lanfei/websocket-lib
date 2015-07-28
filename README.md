@@ -17,7 +17,7 @@ $ npm install websocket-lib
 ### Server
 
 ```js
-var ws = require('../lib/websocket');
+var ws = require('websocket-lib');
 
 var server = ws.createServer(function (session) {
 	console.log('client connected');
@@ -38,7 +38,7 @@ server.listen(8000);
 ### Client
 
 ```js
-var ws = require('../lib/websocket');
+var ws = require('websocket-lib');
 
 var client = ws.connect('ws://localhost:8000', function (session) {
 

@@ -1,5 +1,7 @@
 # System Files
 .DS_Store
+.sh
+.bat
 
 # IDE
 .idea
