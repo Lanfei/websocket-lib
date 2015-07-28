@@ -7,10 +7,10 @@ var client = ws.connect('ws://localhost:8000', function (session) {
 		console.log('server msg:', data);
 	});
 	session.on('end', function (code) {
-		console.log('server end:', code);
+		console.log('server ended:', code);
 	});
 	session.on('close', function () {
-		console.log('server close');
+		console.log('session closed');
 	});
 });
 client.on('error', function (error) {

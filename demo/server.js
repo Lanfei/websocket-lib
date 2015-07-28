@@ -1,16 +1,16 @@
 var ws = require('../lib/websocket');
 
 var server = ws.createServer(function (session) {
-	console.log('client connect');
+	console.log('client connected');
 	session.on('data', function (data) {
 		console.log('client msg:', data);
 		this.send('Hi, ' + data);
 	});
 	session.on('end', function (code) {
-		console.log('client end:', code);
+		console.log('client ended:', code);
 	});
 	session.on('close', function () {
-		console.log('client close');
+		console.log('session closed');
 	});
 });
 
@@ -19,7 +19,7 @@ server.on('listening', function () {
 });
 
 server.on('close', function () {
-	console.log('server close');
+	console.log('server closed');
 });
 
 server.on('error', function (error) {
