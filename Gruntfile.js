@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		jsdoc: {
 			dist: {
-				src: ['lib/*.js'],
+				src: ['lib/*.js', 'README.md'],
 				dest: 'docs'
 			}
 		}

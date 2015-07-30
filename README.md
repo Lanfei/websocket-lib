@@ -1,14 +1,18 @@
 # Node WebSocket Library
 
-[![NPM](https://nodei.co/npm/websocket-lib.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket-lib/)
-
 This is a lightweight WebSocket library for Node.
+
+[![NPM](https://nodei.co/npm/websocket-lib.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket-lib/)
 
 ## Installation
 
 ```bash
 $ npm install websocket-lib
 ```
+
+### Documentation
+
+[You can read the full API documentation here.](http://lanfei.github.io/websocket-lib)
 
 ## Examples
 
@@ -67,7 +71,3 @@ ws.onopen = function () {
 	ws.send('Client');
 };
 ```
-
-### Documentation
-
-Coming Soon
