@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lanfei/websocket.git"
+    "url": "git+https://github.com/Lanfei/websocket-lib.git"
   },
   "keywords": [
     "websocket",
@@ -19,9 +19,9 @@
   "author": "Lanfei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Lanfei/websocket/issues"
+    "url": "https://github.com/Lanfei/websocket-lib/issues"
   },
-  "homepage": "https://github.com/Lanfei/websocket#readme",
+  "homepage": "https://github.com/Lanfei/websocket-lib#readme",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-jsdoc": "^0.6.7"
