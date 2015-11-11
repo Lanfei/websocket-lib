@@ -3,6 +3,7 @@
 var ws = require('../lib/websocket');
 
 var client = ws.connect('ws://localhost:8000', function (session) {
+	console.log('connected');
 	session.setEncoding('utf8');
 	session.send('Client');
 	session.on('data', function (data) {
