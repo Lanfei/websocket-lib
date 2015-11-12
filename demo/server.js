@@ -14,6 +14,9 @@ var server = ws.createServer(function (session) {
 	session.on('close', function () {
 		console.log('session closed');
 	});
+	session.on('error', function (error) {
+		// ignore
+	});
 });
 
 server.on('listening', function () {
