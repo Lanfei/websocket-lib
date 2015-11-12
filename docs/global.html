@@ -110,203 +110,6 @@
 
 
 <div class="description">
-    An alias of <a href="global.html#createConnection">createConnection</a>.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connectListener</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="websocket.js.html">websocket.js</a>, <a href="websocket.js.html#line25">line 25</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="createConnection"><span class="type-signature"></span>createConnection<span class="signature">(options<span class="signature-attributes">opt</span>, connectListener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Client.html">Client</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
     Create a connection to the WebSocket Server.
 </div>
 
@@ -351,10 +154,10 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -516,6 +319,46 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>subProtocols</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The list of WebSocket sub-protocols.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -593,7 +436,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="websocket.js.html">websocket.js</a>, <a href="websocket.js.html#line32">line 32</a>
+        <a href="websocket.js.html">websocket.js</a>, <a href="websocket.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -953,13 +796,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createConnection">createConnection</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 09 2015 18:41:11 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Thu Nov 12 2015 15:10:26 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

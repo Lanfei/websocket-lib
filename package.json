@@ -1,6 +1,6 @@
 {
   "name": "websocket-lib",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "This is a lightweight WebSocket library for Node.",
   "main": "index.js",
   "scripts": {

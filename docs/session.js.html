@@ -58,7 +58,9 @@ const CLOSE_REASON_TLS_HANDSHAKE_FAILED = 1015;
  * @param   {Socket}          socket  see {@link Session#socket}
  */
 function Session(request, socket) {
-	Stream.Duplex.call(this);
+	Stream.Duplex.call(this, {
+		decodeStrings: false
+	});
 	var self = this;
 
 	/**
@@ -86,7 +88,7 @@ function Session(request, socket) {
 		this.sendPong();
 	});
 	this.on('end', function () {
-		this.close();
+		this.end();
 	});
 	socket.on('end', function () {
 		socket.end();
@@ -97,8 +99,13 @@ function Session(request, socket) {
 		 */
 		self.emit('close');
 	});
+	socket.on('timeout', function () {
+		/**
+		 * @event Session#timeout
+		 */
+		self.emit('timeout');
+	});
 	socket.on('error', function (error) {
-		console.log(error);
 		/**
 		 * @event Session#error
 		 * @type  Error
@@ -109,7 +116,7 @@ function Session(request, socket) {
 
 util.inherits(Session, Stream.Duplex);
 
-Session.getWSKey = function (key) {
+Session.getAcceptKey = function (key) {
 	var shasum = crypto.createHash('sha1');
 	return shasum.update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
 };
@@ -187,7 +194,7 @@ Session.prototype._initReceiver = function () {
  */
 Session.prototype.pause = function () {
 	this.socket.pause();
-	Session.super_.prototype.pause.call(this);
+	Stream.Duplex.prototype.pause.call(this);
 	return this;
 };
 
@@ -197,7 +204,23 @@ Session.prototype.pause = function () {
  */
 Session.prototype.resume = function () {
 	this.socket.resume();
-	Session.super_.prototype.resume.call(this);
+	Stream.Duplex.prototype.resume.call(this);
+	return this;
+};
+
+/**
+ * Sets the session to timeout after timeout milliseconds of inactivity on the session.
+ * By default Session do not have a timeout.
+ * @param  {Number}   timeout  If timeout is 0, then the existing idle timeout is disabled.
+ * @param  {Function} callback The optional callback parameter will be added as a one time listener for the 'timeout' event.
+ * @return {Session}  this
+ * @see    {@link https://nodejs.org/api/net.html#net_socket_settimeout_timeout_callback}
+ */
+Session.prototype.setTimeout = function (timeout, callback) {
+	if (callback) {
+		this.once('timeout', callback);
+	}
+	this.socket.setTimeout(timeout);
 	return this;
 };
 
@@ -244,7 +267,7 @@ Session.prototype._write = function (data, encoding, callback) {
 		encoding = encoding.toLowerCase();
 		encoding = encoding.replace('-', '');
 	}
-	this.send(data, encoding !== 'utf8', callback);
+	this.send(data, encoding &amp;&amp; encoding !== 'utf8', callback);
 };
 
 /**
@@ -256,7 +279,7 @@ Session.prototype._write = function (data, encoding, callback) {
 Session.prototype.send = function (data, binary, callback) {
 	if (typeof binary === 'function') {
 		callback = binary;
-		binary = false;
+		binary = null;
 	}
 	var frame = new Frame(data, binary);
 	this.sendFrame(frame, callback);
@@ -308,7 +331,6 @@ Session.prototype.sendPong = function (callback) {
  * @param {Function} [callback] The callback function.
  */
 Session.prototype.sendFrame = function (frame, callback) {
-	console.log(callback);
 	return this.socket.write(frame.toBuffer(), callback);
 };
 
@@ -316,7 +338,7 @@ Session.prototype.sendFrame = function (frame, callback) {
  * Sends a close frame on the socket.
  * @param {Number} [reason] The status code of close reason.
  */
-Session.prototype.close = function (reason) {
+Session.prototype.sendClose = function (reason) {
 	if (this.writable) {
 		var code = new Buffer(2);
 		code.writeInt16BE(reason || CLOSE_REASON_NO_STATUS, 0);
@@ -327,20 +349,17 @@ Session.prototype.close = function (reason) {
 		this.sendFrame(frame);
 		this.writable = false;
 	}
-	this.socket.end();
 };
 
 /**
  * Half-closes the socket.
- * @param {String|Buffer} data       The data to be sent.
- * @param {String}        {encoding} The encoding of the data.
+ * @param {String|Buffer} [data]     The data to be sent.
+ * @param {String}        [encoding] The encoding of data.
  */
 Session.prototype.end = function (data, encoding) {
-	if (data !== undefined) {
-		this.write(data, encoding);
-	}
-	this.close();
-	Session.super_.prototype.end.apply(this, arguments);
+	Stream.Duplex.prototype.end.apply(this, arguments);
+	this.sendClose();
+	this.socket.end();
 };
 
 /**
@@ -390,13 +409,13 @@ Session.Session = Session;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createConnection">createConnection</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 09 2015 18:41:11 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Thu Nov 12 2015 15:10:26 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

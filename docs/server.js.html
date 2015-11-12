@@ -55,8 +55,8 @@ function Server(options, sessionListener) {
 	}
 
 	var self = this;
-	var server = options.httpServer || http.createServer();
-	var autoAccept = options.autoAccept;
+	var server = options['httpServer'] || http.createServer();
+	var autoAccept = options['autoAccept'];
 	if (autoAccept === undefined) {
 		autoAccept = true;
 	} else {
@@ -86,9 +86,17 @@ function Server(options, sessionListener) {
 	});
 	server.on('upgrade', function (req, socket) {
 		var session = new Server.Session(req, socket);
+		var upgrade = req.headers['upgrade'];
+		var key = req.headers['sec-websocket-key'];
+
+		if (!key || !upgrade || upgrade.toLowerCase() !== 'websocket') {
+			session.reject(400);
+			return;
+		}
 		if (self.autoAccept) {
 			session.accept();
 		}
+
 		/**
 		 * @event Server#session
 		 * @type  Session
@@ -121,6 +129,12 @@ function Server(options, sessionListener) {
 		 */
 		self.emit('error', error);
 	});
+	if (!options['httpServer']) {
+		server.on('request', function (req, res) {
+			res.writeHead(426);
+			res.end();
+		});
+	}
 	if (sessionListener) {
 		this.on('session', sessionListener);
 	}
@@ -129,34 +143,48 @@ function Server(options, sessionListener) {
 util.inherits(Server, events.EventEmitter);
 
 /**
- * Begin accepting connections.
+ * Begin accepting sessions.
  * @param {Number}   port       The listening IP.
  * @param {String}   [host]     The listening host.
- * @param {Number}   [backlog]  maximum length of the queue of pending connections.
- * @param {Function} [callback] A listener for the 'connection' event.
+ * @param {Number}   [backlog]  maximum length of the queue of pending sessions.
+ * @param {Function} [callback] A listener for the 'listening' event.
  * @see   {@link https://nodejs.org/api/http.html#http_server_listen_port_hostname_backlog_callback}
  */
 Server.prototype.listen = function (port, host, backlog, callback) {
-	this.httpServer.listen.apply(this.httpServer, arguments);
+	var args = Array.prototype.slice.apply(arguments);
+	if (typeof args[args.length - 1] === 'function') {
+		callback = args.pop();
+		this.on('listening', callback);
+	}
+	this.httpServer.listen.apply(this.httpServer, args);
+	return this;
 };
 
 /**
- * Stops the server from accepting new connections and keeps existing connections.
- * This function is asynchronous, the server is finally closed when all connections
+ * Stops the server from accepting new sessions and keeps existing sessions.
+ * This function is asynchronous, the server is finally closed when all sessions
  * are ended and the server emits a 'close' event.
- * @param {Function} callback A Listener for the 'close' event.
+ * @param {Function} [callback] A Listener for the 'close' event.
  */
 Server.prototype.close = function (callback) {
-	this.httpServer.close(callback);
+	if (callback) {
+		this.on('close', callback);
+	}
+	this.httpServer.close();
+	return this;
 };
 
 /**
  * Sets the timeout value for sockets.
- * @param {Number}   msecs    milliseconds
- * @param {Function} callback A Listener for the 'timeout' event.
+ * @param {Number}   msecs      milliseconds
+ * @param {Function} [callback] A Listener for the 'timeout' event.
  */
 Server.prototype.setTimeout = function (msecs, callback) {
-	this.httpServer.setTimeout(msecs, callback);
+	if (callback) {
+		this.on('timeout', callback);
+	}
+	this.httpServer.setTimeout(msecs);
+	return this;
 };
 
 /**
@@ -205,35 +233,47 @@ function ServerSession(request, socket) {
 util.inherits(ServerSession, Session);
 
 /**
- * Accept the connection request.
+ * Accept the session request.
+ * @param {Object}        [headers]          Headers to be sent.
  */
-ServerSession.prototype.accept = function () {
+ServerSession.prototype.accept = function (headers) {
 	if (this._headerSent) {
 		return;
 	}
-	var key = this.request.headers['sec-websocket-key'];
-	var acceptKey = Session.getWSKey(key);
-	this.writeHead(101, {
-		'Upgrade': 'WebSocket',
-		'Connection': 'Upgrade',
-		'Sec-WebSocket-Accept': acceptKey
-	});
+	var reqHeaders = this.request.headers;
+	var resHeaders = this._resHeaders;
+	var key = reqHeaders['sec-websocket-key'];
+	var subProtocol = reqHeaders['sec-websocket-protocol'];
+	var acceptKey = Session.getAcceptKey(key);
+
+	headers = headers || {};
+	headers['Upgrade'] = 'WebSocket';
+	headers['Connection'] = 'Upgrade';
+	headers['Sec-WebSocket-Accept'] = acceptKey;
+	if (subProtocol &amp;&amp; !resHeaders['Sec-WebSocket-Protocol']) {
+		headers['Sec-WebSocket-Protocol'] = subProtocol.split(/, +/)[0];
+	}
+
+	this.writeHead(101, headers);
 	this._initReceiver();
 	this._flushHeaders();
 };
 
 /**
- * Reject the connection request.
- * @param {Number} [statusCode = 403] The HTTP status code of handshake.
- * @param {Object} [headers]          Extra headers.
+ * Reject the session request.
+ * @param {Number}        [statusCode = 403] The HTTP status code of handshake.
+ * @param {Object}        [headers]          Headers to be sent.
+ * @param {String|Buffer} [body]             Response body.
+ * @param {String}        [encoding]         The encoding of response body.
  */
-ServerSession.prototype.reject = function (statusCode, headers) {
+ServerSession.prototype.reject = function (statusCode, headers, body, encoding) {
 	if (this._headerSent) {
 		return;
 	}
 	this.writeHead(statusCode || 403, headers);
 	this.setHeader('Connection', 'close');
 	this._flushHeaders();
+	this.socket.end(body, encoding);
 };
 
 /**
@@ -298,7 +338,7 @@ ServerSession.prototype._flushHeaders = function () {
 
 ServerSession.prototype.sendFrame = function (frame, callback) {
 	this._flushHeaders();
-	return this.socket.write(frame.toBuffer(), callback);
+	return Session.prototype.sendFrame.call(this, frame, callback);
 };
 
 module.exports = Server;
@@ -314,13 +354,13 @@ Server.Session = ServerSession;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createConnection">createConnection</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 09 2015 18:41:11 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Thu Nov 12 2015 15:10:26 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

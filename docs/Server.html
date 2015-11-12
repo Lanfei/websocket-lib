@@ -553,7 +553,7 @@ otherwise, you should resolve sessions by calling Session#accept or Session#reje
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line134">line 134</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -587,15 +587,15 @@ otherwise, you should resolve sessions by calling Session#accept or Session#reje
 
     
 
-    <h4 class="name" id="close"><span class="type-signature"></span>close<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="close"><span class="type-signature"></span>close<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Stops the server from accepting new connections and keeps existing connections.
-This function is asynchronous, the server is finally closed when all connections
+    Stops the server from accepting new sessions and keeps existing sessions.
+This function is asynchronous, the server is finally closed when all sessions
 are ended and the server emits a 'close' event.
 </div>
 
@@ -619,6 +619,8 @@ are ended and the server emits a 'close' event.
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -644,6 +646,16 @@ are ended and the server emits a 'close' event.
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -689,7 +701,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line121">line 121</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line141">line 141</a>
     </li></ul></dd>
     
 
@@ -727,7 +739,7 @@ are ended and the server emits a 'close' event.
 
 
 <div class="description">
-    Begin accepting connections.
+    Begin accepting sessions.
 </div>
 
 
@@ -855,7 +867,7 @@ are ended and the server emits a 'close' event.
 
             
 
-            <td class="description last">maximum length of the queue of pending connections.</td>
+            <td class="description last">maximum length of the queue of pending sessions.</td>
         </tr>
 
     
@@ -888,7 +900,7 @@ are ended and the server emits a 'close' event.
 
             
 
-            <td class="description last">A listener for the 'connection' event.</td>
+            <td class="description last">A listener for the 'listening' event.</td>
         </tr>
 
     
@@ -929,7 +941,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line111">line 111</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -967,7 +979,7 @@ are ended and the server emits a 'close' event.
 
     
 
-    <h4 class="name" id="setTimeout"><span class="type-signature"></span>setTimeout<span class="signature">(msecs, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setTimeout"><span class="type-signature"></span>setTimeout<span class="signature">(msecs, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -998,6 +1010,8 @@ are ended and the server emits a 'close' event.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1023,6 +1037,14 @@ are ended and the server emits a 'close' event.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1045,6 +1067,16 @@ are ended and the server emits a 'close' event.
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1090,7 +1122,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line130">line 130</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -1176,7 +1208,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line77">line 77</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -1352,7 +1384,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line90">line 90</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line98">line 98</a>
     </li></ul></dd>
     
 
@@ -1430,7 +1462,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line71">line 71</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -1518,7 +1550,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line64">line 64</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -1606,7 +1638,7 @@ are ended and the server emits a 'close' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line83">line 83</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -1644,13 +1676,13 @@ are ended and the server emits a 'close' event.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createConnection">createConnection</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 09 2015 18:41:12 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Thu Nov 12 2015 15:10:26 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
