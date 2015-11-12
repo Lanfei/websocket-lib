@@ -9,8 +9,8 @@ var client = ws.connect('ws://localhost:8000', function (session) {
 	session.on('data', function (data) {
 		console.log('server msg:', data);
 	});
-	session.on('end', function (code) {
-		console.log('server ended:', code);
+	session.on('end', function (code, reason) {
+		console.log('server ended:', code, reason);
 	});
 	session.on('close', function () {
 		console.log('session closed');

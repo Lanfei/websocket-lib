@@ -8,8 +8,8 @@ var server = ws.createServer(function (session) {
 		console.log('client msg:', data);
 		this.send('Hi, ' + data);
 	});
-	session.on('end', function (code) {
-		console.log('client ended:', code);
+	session.on('end', function (code, reason) {
+		console.log('client ended:', code, reason);
 	});
 	session.on('close', function () {
 		console.log('session closed');
