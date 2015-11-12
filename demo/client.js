@@ -16,6 +16,7 @@ var client = ws.connect('ws://localhost:8000', function (session) {
 		console.log('session closed');
 	});
 });
+
 client.on('error', function (error) {
 	console.error(error.stack);
 });
