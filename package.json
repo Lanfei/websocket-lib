@@ -1,6 +1,6 @@
 {
   "name": "websocket-lib",
-  "version": "2.3.8",
+  "version": "2.3.9",
   "description": "This is a lightweight WebSocket library for Node.",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,6 @@
   "homepage": "https://github.com/Lanfei/websocket-lib#readme",
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-jsdoc": "^0.6.7"
+    "grunt-jsdoc": "^1.0.0"
   }
 }

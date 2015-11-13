@@ -12,7 +12,7 @@ $ npm install websocket-lib
 
 ### Documentation
 
-- [API documentation](http://lanfei.github.io/websocket)
+- [API documentation](http://lanfei.github.io/websocket-lib)
 - [The WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
 
 ## Examples
