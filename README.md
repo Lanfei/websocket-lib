@@ -2,7 +2,7 @@
 
 This is a lightweight WebSocket library for Node.
 
-[![NPM](https://nodei.co/npm/websocket-lib.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket-lib/)
+[![NPM](https://nodei.co/npm/websocket-lib.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket-lib)
 
 ## Installation
 
