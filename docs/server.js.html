@@ -31,6 +31,7 @@
  * @author Lanfei
  * @module server
  */
+var url = require('url');
 var util = require('util');
 var http = require('http');
 var events = require('events');
@@ -85,10 +86,18 @@ function Server(options, sessionListener) {
 		self.emit('connection', socket);
 	});
 	server.on('upgrade', function (req, socket) {
-		var session = new Server.Session(req, socket);
+		var session = new self.constructor.Session(req, socket);
+		var path = options['path'];
 		var upgrade = req.headers['upgrade'];
 		var key = req.headers['sec-websocket-key'];
+		var reqPath = url.parse(req['url'])['path'];
 
+		session.server = self;
+
+		if (path &amp;&amp; path !== reqPath) {
+			session.reject(404);
+			return;
+		}
 		if (!key || !upgrade || upgrade.toLowerCase() !== 'websocket') {
 			session.reject(400);
 			return;
@@ -234,6 +243,12 @@ function ServerSession(request, socket) {
 	this._headerSent = false;
 
 	/**
+	 * The server instance of this session.
+	 * @type {Server}
+	 */
+	this.server = null;
+
+	/**
 	 * The HTTP status code of handshake.
 	 * @type    {Number}
 	 * @default 200
@@ -371,13 +386,13 @@ Server.Session = ServerSession;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:drain">drain</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:drain">drain</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:clientError">clientError</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:drain">drain</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createServer">createServer</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="Client.ClientSession.html">ClientSession</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Receiver.html">Receiver</a></li><li><a href="Server.html">Server</a></li><li><a href="Server.ServerSession.html">ServerSession</a></li><li><a href="Session.html">Session</a></li></ul><h3>Events</h3><ul><li><a href="Client.ClientSession.html#event:close">close</a></li><li><a href="Client.ClientSession.html#event:data">data</a></li><li><a href="Client.ClientSession.html#event:drain">drain</a></li><li><a href="Client.ClientSession.html#event:end">end</a></li><li><a href="Client.ClientSession.html#event:error">error</a></li><li><a href="Client.ClientSession.html#event:frame">frame</a></li><li><a href="Client.ClientSession.html#event:ping">ping</a></li><li><a href="Client.ClientSession.html#event:pong">pong</a></li><li><a href="Client.ClientSession.html#event:timeout">timeout</a></li><li><a href="Client.html#event:connect">connect</a></li><li><a href="Client.html#event:error">error</a></li><li><a href="Receiver.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:close">close</a></li><li><a href="Server.ServerSession.html#event:data">data</a></li><li><a href="Server.ServerSession.html#event:drain">drain</a></li><li><a href="Server.ServerSession.html#event:end">end</a></li><li><a href="Server.ServerSession.html#event:error">error</a></li><li><a href="Server.ServerSession.html#event:frame">frame</a></li><li><a href="Server.ServerSession.html#event:ping">ping</a></li><li><a href="Server.ServerSession.html#event:pong">pong</a></li><li><a href="Server.ServerSession.html#event:timeout">timeout</a></li><li><a href="Server.html#event:clientError">clientError</a></li><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Server.html#event:session">session</a></li><li><a href="Server.html#event:timeout">timeout</a></li><li><a href="Session.html#event:close">close</a></li><li><a href="Session.html#event:data">data</a></li><li><a href="Session.html#event:drain">drain</a></li><li><a href="Session.html#event:end">end</a></li><li><a href="Session.html#event:error">error</a></li><li><a href="Session.html#event:frame">frame</a></li><li><a href="Session.html#event:ping">ping</a></li><li><a href="Session.html#event:pong">pong</a></li><li><a href="Session.html#event:timeout">timeout</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Mar 30 2017 02:30:08 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 22 2017 11:58:38 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

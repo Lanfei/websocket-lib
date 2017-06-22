@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var ws = require('../lib/websocket');
+var ws = require('../');
 
 var server = ws.createServer(function (session) {
 	console.log('client connected');

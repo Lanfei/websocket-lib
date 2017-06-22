@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var ws = require('../lib/websocket');
+var ws = require('../');
 
 var client = ws.connect('ws://localhost:8000', function (session) {
 	console.log('connected');
