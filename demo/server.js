@@ -3,25 +3,25 @@
 var ws = require('../');
 
 var server = ws.createServer(function (session) {
-	console.log('client connected');
+	console.log('Client Connected');
 	session.on('data', function (data) {
-		console.log('client msg:', data);
+		console.log('Client Data:', data);
 		this.send('Hi, ' + data);
 	});
 	session.on('end', function (code, reason) {
-		console.log('client ended:', code, reason);
+		console.log('Client Ended:', code, reason);
 	});
 	session.on('close', function () {
-		console.log('session closed');
+		console.log('Session Closed');
 	});
 });
 
 server.on('listening', function () {
-	console.log('server listening');
+	console.log('Server Listening');
 });
 
 server.on('close', function () {
-	console.log('server closed');
+	console.log('Server Closed');
 });
 
 server.on('error', function (error) {

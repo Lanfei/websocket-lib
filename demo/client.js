@@ -3,17 +3,17 @@
 var ws = require('../');
 
 var client = ws.connect('ws://localhost:8000', function (session) {
-	console.log('connected');
+	console.log('Connected');
 	session.setEncoding('utf8');
 	session.send('Client');
 	session.on('data', function (data) {
-		console.log('server msg:', data);
+		console.log('Server Data:', data);
 	});
 	session.on('end', function (code, reason) {
-		console.log('server ended:', code, reason);
+		console.log('Server Ended:', code, reason);
 	});
 	session.on('close', function () {
-		console.log('session closed');
+		console.log('Session Closed');
 	});
 });
 
