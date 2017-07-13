@@ -1,6 +1,6 @@
 {
   "name": "websocket-lib",
-  "version": "2.7.4",
+  "version": "2.7.5",
   "description": "This is a lightweight WebSocket library for Node.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "websocket",
     "ws",
     "socket",
-    "stream"
+    "stream",
+    "realtime"
   ],
   "author": "Lanfei",
   "license": "MIT",
