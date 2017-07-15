@@ -14,6 +14,7 @@ $ npm install websocket-lib
 
 - [API documentation](http://lanfei.github.io/websocket-lib)
 - [The WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
+- [The WebSocket API](https://www.w3.org/TR/websockets/)
 
 ## Examples
 
