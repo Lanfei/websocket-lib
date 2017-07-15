@@ -63,8 +63,9 @@ const CLOSE_REASON_TLS_HANDSHAKE_FAILED = 1015;
  * @extends Stream
  * @param   {IncomingMessage} request see {@link Session#request}
  * @param   {Socket}          socket  see {@link Session#socket}
+ * @param   {Buffer}          [head]  Data that received with headers.
  */
-function Session(request, socket) {
+function Session(request, socket, head) {
 	Stream.Duplex.call(this, {
 		decodeStrings: false,
 		readableObjectMode: true
@@ -92,28 +93,34 @@ function Session(request, socket) {
 	 */
 	this.connection = socket;
 
-	this._closeCode = null;
+	this.closeCode = null;
 
-	this._closeReason = '';
+	this.closeReason = '';
+
+	this.closeTimeout = 30000;
+
+	this._closeTimer = null;
 
 	this._decoder = null;
+
+	if (head &amp;&amp; head.length) {
+		socket.unshift(head);
+	}
 
 	this.on('ping', function () {
 		this.sendPong();
 	});
 	this.on('end', function (code, reason) {
+		clearTimeout(this._closeTimer);
 		if (Session.isValidCloseCode(code)) {
-			this._closeCode = code;
+			this.closeCode = code;
 		} else if (!code) {
-			this._closeCode = CLOSE_REASON_NO_STATUS;
+			this.closeCode = CLOSE_REASON_NO_STATUS;
 		} else {
-			this._closeCode = CLOSE_REASON_PROTOCOL_ERROR;
+			this.closeCode = CLOSE_REASON_PROTOCOL_ERROR;
 		}
-		this._closeReason = reason;
+		this.closeReason = reason;
 		this.end();
-	});
-	this.on('error', function () {
-		this.destroy();
 	});
 	socket.on('end', function () {
 		socket.end();
@@ -123,12 +130,14 @@ function Session(request, socket) {
 		 * Emitted once the socket is fully closed.
 		 * @event Session#close
 		 */
-		this.state = STATE_CLOSED;
+		self.state = STATE_CLOSED;
+		self.closeCode = self.closeCode || Session.CLOSE_REASON_ABNORMAL;
 		self.emit('close');
 	});
 	socket.on('timeout', function () {
 		/**
-		 * Emitted if the socket times out from inactivity. This is only to notify that the socket has been idle. The user must manually close the connection.
+		 * Emitted if the socket times out from inactivity. This is only to notify that the socket has been idle.
+		 * The user must manually close the connection.
 		 * @event Session#timeout
 		 */
 		self.emit('timeout');
@@ -362,16 +371,19 @@ Session.prototype.sendClose = function (code, reason, callback) {
 		if (code &amp;&amp; !Session.isValidCloseCode(code)) {
 			throw new Error('Invalid close code.');
 		}
-		var data = new Buffer(2 + (reason ? Buffer.byteLength(reason) : 0));
-		data.writeInt16BE(code || CLOSE_REASON_NORMAL, 0);
-		if (reason) {
-			data.write(reason, 2);
-		}
+
+		code = code || this.closeCode || CLOSE_REASON_NORMAL;
+		reason = reason || this.closeReason || '';
+
+		var data = new Buffer(2 + Buffer.byteLength(reason));
+		data.writeInt16BE(code, 0);
+		data.write(reason, 2);
 
 		var frame = new Frame(data);
 		frame.opcode = Frame.OPCODE_CLOSE;
 
 		this.state = STATE_CLOSING;
+		this._closeTimer = setTimeout(this.destroy.bind(this), this.closeTimeout);
 
 		return this.sendFrame(frame, callback);
 	}
@@ -391,18 +403,18 @@ Session.prototype.end = function (data, encoding) {
 	if (data !== null &amp;&amp; data !== undefined) {
 		this.write(data, encoding);
 	}
-	this.close(this._closeCode, this._closeReason);
+	this.close();
 };
 
 /**
  * Half-closes the socket, i.e. it sends a FIN packet. It is possible the server will still send some data.
- * @param  {Number}   [code]   The status code of close reason.
- * @param  {String}   [reason] The close reason.
+ * @param {Number} [code]   The status code of close reason.
+ * @param {String} [reason] The close reason.
  */
 Session.prototype.close = function (code, reason) {
 	Stream.Duplex.prototype.end.call(this);
 	this.sendClose(code, reason);
-	if (this._closeCode) {
+	if (this.closeCode) {
 		this.socket.end();
 	}
 };
@@ -412,49 +424,60 @@ Session.prototype.close = function (code, reason) {
  * Only necessary in case of errors.
  */
 Session.prototype.destroy = function () {
-	this.writable = false;
-	this.socket.destroy();
+	var superDestroy = Stream.Duplex.prototype.destroy;
+	if (superDestroy) {
+		superDestroy.apply(this, arguments);
+	} else {
+		this._destroy();
+	}
+};
+
+Session.prototype._destroy = function (err, cb) {
+	Stream.Duplex.prototype.end.call(this);
+	this.state = Session.STATE_CLOSED;
+	this.readable = this.writable = false;
+	this.socket.destroy(err, cb);
 };
 
 /** @const */
-Session.STATE_CONNECTING = STATE_CONNECTING;
+Session.STATE_CONNECTING = Session.prototype.STATE_CONNECTING = STATE_CONNECTING;
 /** @const */
-Session.STATE_OPEN = STATE_OPEN;
+Session.STATE_OPEN = Session.prototype.STATE_OPEN = STATE_OPEN;
 /** @const */
-Session.STATE_CLOSING = STATE_CLOSING;
+Session.STATE_CLOSING = Session.prototype.STATE_CLOSING = STATE_CLOSING;
 /** @const */
-Session.STATE_CLOSED = STATE_CLOSED;
+Session.STATE_CLOSED = Session.prototype.STATE_CLOSED = STATE_CLOSED;
 
 /** @const */
-Session.CLOSE_REASON_NORMAL = CLOSE_REASON_NORMAL;
+Session.CLOSE_REASON_NORMAL = Session.prototype.CLOSE_REASON_NORMAL = CLOSE_REASON_NORMAL;
 /** @const */
-Session.CLOSE_REASON_GOING_AWAY = CLOSE_REASON_GOING_AWAY;
+Session.CLOSE_REASON_GOING_AWAY = Session.prototype.CLOSE_REASON_GOING_AWAY = CLOSE_REASON_GOING_AWAY;
 /** @const */
-Session.CLOSE_REASON_PROTOCOL_ERROR = CLOSE_REASON_PROTOCOL_ERROR;
+Session.CLOSE_REASON_PROTOCOL_ERROR = Session.prototype.CLOSE_REASON_PROTOCOL_ERROR = CLOSE_REASON_PROTOCOL_ERROR;
 /** @const */
-Session.CLOSE_REASON_UNSUPPORTED_DATA = CLOSE_REASON_UNSUPPORTED_DATA;
+Session.CLOSE_REASON_UNSUPPORTED_DATA = Session.prototype.CLOSE_REASON_UNSUPPORTED_DATA = CLOSE_REASON_UNSUPPORTED_DATA;
 /** @const */
-Session.CLOSE_REASON_RESERVED = CLOSE_REASON_RESERVED;
+Session.CLOSE_REASON_RESERVED = Session.prototype.CLOSE_REASON_RESERVED = CLOSE_REASON_RESERVED;
 /** @const */
-Session.CLOSE_REASON_NO_STATUS = CLOSE_REASON_NO_STATUS;
+Session.CLOSE_REASON_NO_STATUS = Session.prototype.CLOSE_REASON_NO_STATUS = CLOSE_REASON_NO_STATUS;
 /** @const */
-Session.CLOSE_REASON_ABNORMAL = CLOSE_REASON_ABNORMAL;
+Session.CLOSE_REASON_ABNORMAL = Session.prototype.CLOSE_REASON_ABNORMAL = CLOSE_REASON_ABNORMAL;
 /** @const */
-Session.CLOSE_REASON_INVALID_DATA = CLOSE_REASON_INVALID_DATA;
+Session.CLOSE_REASON_INVALID_DATA = Session.prototype.CLOSE_REASON_INVALID_DATA = CLOSE_REASON_INVALID_DATA;
 /** @const */
-Session.CLOSE_REASON_POLICY_VIOLATION = CLOSE_REASON_POLICY_VIOLATION;
+Session.CLOSE_REASON_POLICY_VIOLATION = Session.prototype.CLOSE_REASON_POLICY_VIOLATION = CLOSE_REASON_POLICY_VIOLATION;
 /** @const */
-Session.CLOSE_REASON_MESSAGE_TOO_BIG = CLOSE_REASON_MESSAGE_TOO_BIG;
+Session.CLOSE_REASON_MESSAGE_TOO_BIG = Session.prototype.CLOSE_REASON_MESSAGE_TOO_BIG = CLOSE_REASON_MESSAGE_TOO_BIG;
 /** @const */
-Session.CLOSE_REASON_EXTENSION_REQUIRED = CLOSE_REASON_EXTENSION_REQUIRED;
+Session.CLOSE_REASON_EXTENSION_REQUIRED = Session.prototype.CLOSE_REASON_EXTENSION_REQUIRED = CLOSE_REASON_EXTENSION_REQUIRED;
 /** @const */
-Session.CLOSE_REASON_INTERNAL_SERVER_ERROR = CLOSE_REASON_INTERNAL_SERVER_ERROR;
+Session.CLOSE_REASON_INTERNAL_SERVER_ERROR = Session.prototype.CLOSE_REASON_INTERNAL_SERVER_ERROR = CLOSE_REASON_INTERNAL_SERVER_ERROR;
 /** @const */
-Session.CLOSE_REASON_SERVICE_RESTART = CLOSE_REASON_SERVICE_RESTART;
+Session.CLOSE_REASON_SERVICE_RESTART = Session.prototype.CLOSE_REASON_SERVICE_RESTART = CLOSE_REASON_SERVICE_RESTART;
 /** @const */
-Session.CLOSE_REASON_TRY_AGAIN_LATER = CLOSE_REASON_TRY_AGAIN_LATER;
+Session.CLOSE_REASON_TRY_AGAIN_LATER = Session.prototype.CLOSE_REASON_TRY_AGAIN_LATER = CLOSE_REASON_TRY_AGAIN_LATER;
 /** @const */
-Session.CLOSE_REASON_TLS_HANDSHAKE_FAILED = CLOSE_REASON_TLS_HANDSHAKE_FAILED;
+Session.CLOSE_REASON_TLS_HANDSHAKE_FAILED = Session.prototype.CLOSE_REASON_TLS_HANDSHAKE_FAILED = CLOSE_REASON_TLS_HANDSHAKE_FAILED;
 
 module.exports = Session;
 Session.Session = Session;
@@ -474,7 +497,7 @@ Session.Session = Session;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jul 11 2017 20:32:46 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jul 15 2017 18:46:52 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
