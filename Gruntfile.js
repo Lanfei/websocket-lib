@@ -4,13 +4,15 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		jsdoc: {
 			dist: {
-				src: ['lib/*.js', 'README.md'],
+				src: ['index.js', 'lib/*.js', 'README.md'],
 				dest: 'docs'
 			}
-		}
+		},
+		clean: ['docs']
 	});
 
 	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 
-	grunt.registerTask('default', ['jsdoc']);
+	grunt.registerTask('default', ['clean', 'jsdoc']);
 };
