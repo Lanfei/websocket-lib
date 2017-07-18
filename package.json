@@ -1,10 +1,11 @@
 {
   "name": "websocket-lib",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "This is a lightweight WebSocket library for Node.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "jsdoc2md index.js lib/*.js > docs/API.md"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,6 @@
   },
   "homepage": "https://github.com/Lanfei/websocket-lib#readme",
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-jsdoc": "^2.1.0"
+    "jsdoc-to-markdown": "^3.0.0"
   }
 }

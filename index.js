@@ -11,11 +11,10 @@ exports.Session = require('./lib/session');
 
 /**
  * Create a WebSocket Server.
- * @method createServer
- * @param  {Object}   [options]
- * @param  {Object}   [options.httpServer]        see {@link Server#httpServer}
- * @param  {Boolean}  [options.autoAccept = true] see {@link Server#autoAccept}
- * @param  {Function} [sessionListener]           A listener for the 'session' event.
+ * @param  {Object}      [options]
+ * @param  {http.Server} [options.httpServer]        see {@link Server#httpServer}
+ * @param  {Boolean}     [options.autoAccept = true] see {@link Server#autoAccept}
+ * @param  {Function}    [sessionListener]           A listener for the 'session' event.
  * @return {Server}
  */
 exports.createServer = function (options, sessionListener) {
