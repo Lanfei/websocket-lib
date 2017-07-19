@@ -135,7 +135,7 @@ The client instance of this session.
 An instance of http.IncomingMessage
 
 **Kind**: instance property of [<code>ClientSession</code>](#ClientSession)  
-**See**: [https://nodejs.org/api/http.html#http_http_incomingmessage](https://nodejs.org/api/http.html#http_http_incomingmessage)  
+**See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
 <a name="Session+socket"></a>
 
 ### clientSession.socket : <code>net.Socket</code>
@@ -183,7 +183,7 @@ Set the encoding for the socket as a Readable Stream.
 
 **Kind**: instance method of [<code>ClientSession</code>](#ClientSession)  
 **Returns**: [<code>Session</code>](#Session) - this  
-**See**: [https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding](https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding)  
+**See**: [https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding](https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding)  
 
 | Param | Type |
 | --- | --- |
@@ -740,7 +740,7 @@ The HTTP status message of handshake.
 An instance of http.IncomingMessage
 
 **Kind**: instance property of [<code>ServerSession</code>](#ServerSession)  
-**See**: [https://nodejs.org/api/http.html#http_http_incomingmessage](https://nodejs.org/api/http.html#http_http_incomingmessage)  
+**See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
 <a name="Session+socket"></a>
 
 ### serverSession.socket : <code>net.Socket</code>
@@ -838,7 +838,7 @@ Set the encoding for the socket as a Readable Stream.
 
 **Kind**: instance method of [<code>ServerSession</code>](#ServerSession)  
 **Returns**: [<code>Session</code>](#Session) - this  
-**See**: [https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding](https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding)  
+**See**: [https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding](https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding)  
 
 | Param | Type |
 | --- | --- |
@@ -1103,7 +1103,7 @@ WebSocket Session
 An instance of http.IncomingMessage
 
 **Kind**: instance property of [<code>Session</code>](#Session)  
-**See**: [https://nodejs.org/api/http.html#http_http_incomingmessage](https://nodejs.org/api/http.html#http_http_incomingmessage)  
+**See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
 <a name="Session+socket"></a>
 
 ### session.socket : <code>net.Socket</code>
@@ -1151,7 +1151,7 @@ Set the encoding for the socket as a Readable Stream.
 
 **Kind**: instance method of [<code>Session</code>](#Session)  
 **Returns**: [<code>Session</code>](#Session) - this  
-**See**: [https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding](https://nodejs.org/api/stream.html#stream_stream_setencoding_encoding)  
+**See**: [https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding](https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding)  
 
 | Param | Type |
 | --- | --- |
