@@ -85,6 +85,7 @@ Emitted when an error occurs.
 * [ClientSession](#ClientSession) ⇐ [<code>Session</code>](#Session)
     * [new ClientSession(request, socket, [head], [client])](#new_ClientSession_new)
     * [.client](#ClientSession+client) : [<code>Client</code>](#Client)
+    * [.state](#Session+state) : <code>number</code>
     * [.request](#Session+request) : <code>http.IncomingMessage</code>
     * [.socket](#Session+socket) : <code>net.Socket</code>
     * [.connection](#Session+connection) : <code>net.Socket</code>
@@ -129,10 +130,17 @@ WebSocket Client Session
 The client instance of this session.
 
 **Kind**: instance property of [<code>ClientSession</code>](#ClientSession)  
+<a name="Session+state"></a>
+
+### clientSession.state : <code>number</code>
+The state of the session.
+
+**Kind**: instance property of [<code>ClientSession</code>](#ClientSession)  
+**Overrides**: [<code>state</code>](#Session+state)  
 <a name="Session+request"></a>
 
 ### clientSession.request : <code>http.IncomingMessage</code>
-An instance of http.IncomingMessage
+An instance of http.IncomingMessage.
 
 **Kind**: instance property of [<code>ClientSession</code>](#ClientSession)  
 **See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
@@ -145,7 +153,7 @@ The net.Socket object associated with the connection.
 <a name="Session+connection"></a>
 
 ### clientSession.connection : <code>net.Socket</code>
-An alias of [socket](#Session+socket)
+An alias of [socket](#Session+socket).
 
 **Kind**: instance property of [<code>ClientSession</code>](#ClientSession)  
 <a name="Session+setTimeout"></a>
@@ -502,6 +510,7 @@ WebSocket Frame Receiver
 
 * [Server](#Server) ⇐ <code>events.EventEmitter</code>
     * [new Server([options], [sessionListener])](#new_Server_new)
+    * [.path](#Server+path) : <code>String</code>
     * [.httpServer](#Server+httpServer) : <code>http.Server</code>
     * [.autoAccept](#Server+autoAccept) : <code>Boolean</code>
     * [.timeout](#Server+timeout) : <code>number</code>
@@ -526,10 +535,17 @@ WebSocket Server
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> |  |  |
+| [options.path] | <code>String</code> |  | see [path](#Server+path) |
 | [options.httpServer] | <code>http.Server</code> |  | see [httpServer](#Server+httpServer) |
 | [options.autoAccept] | <code>Boolean</code> | <code>true</code> | see [autoAccept](#Server+autoAccept) |
 | [sessionListener] | <code>function</code> |  | A listener for the 'session' event. |
 
+<a name="Server+path"></a>
+
+### server.path : <code>String</code>
+Accept only connections matching this path.
+
+**Kind**: instance property of [<code>Server</code>](#Server)  
 <a name="Server+httpServer"></a>
 
 ### server.httpServer : <code>http.Server</code>
@@ -673,6 +689,7 @@ Emitted when an error occurs.
     * [.server](#ServerSession+server) : [<code>Server</code>](#Server)
     * [.statusCode](#ServerSession+statusCode) : <code>Number</code>
     * [.statusMessage](#ServerSession+statusMessage) : <code>String</code>
+    * [.state](#Session+state) : <code>number</code>
     * [.request](#Session+request) : <code>http.IncomingMessage</code>
     * [.socket](#Session+socket) : <code>net.Socket</code>
     * [.connection](#Session+connection) : <code>net.Socket</code>
@@ -734,10 +751,17 @@ The HTTP status code of handshake.
 The HTTP status message of handshake.
 
 **Kind**: instance property of [<code>ServerSession</code>](#ServerSession)  
+<a name="Session+state"></a>
+
+### serverSession.state : <code>number</code>
+The state of the session.
+
+**Kind**: instance property of [<code>ServerSession</code>](#ServerSession)  
+**Overrides**: [<code>state</code>](#Session+state)  
 <a name="Session+request"></a>
 
 ### serverSession.request : <code>http.IncomingMessage</code>
-An instance of http.IncomingMessage
+An instance of http.IncomingMessage.
 
 **Kind**: instance property of [<code>ServerSession</code>](#ServerSession)  
 **See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
@@ -750,7 +774,7 @@ The net.Socket object associated with the connection.
 <a name="Session+connection"></a>
 
 ### serverSession.connection : <code>net.Socket</code>
-An alias of [socket](#Session+socket)
+An alias of [socket](#Session+socket).
 
 **Kind**: instance property of [<code>ServerSession</code>](#ServerSession)  
 <a name="ServerSession+accept"></a>
@@ -1040,6 +1064,7 @@ Emitted when data is received.
 * [Session](#Session) ⇐ <code>stream.Duplex</code>
     * [new Session(request, socket, [head])](#new_Session_new)
     * _instance_
+        * [.state](#Session+state) : <code>number</code>
         * [.request](#Session+request) : <code>http.IncomingMessage</code>
         * [.socket](#Session+socket) : <code>net.Socket</code>
         * [.connection](#Session+connection) : <code>net.Socket</code>
@@ -1097,10 +1122,16 @@ WebSocket Session
 | socket | <code>net.Socket</code> | see [socket](#Session+socket) |
 | [head] | <code>Buffer</code> | Data that received with headers. |
 
+<a name="Session+state"></a>
+
+### session.state : <code>number</code>
+The state of the session.
+
+**Kind**: instance property of [<code>Session</code>](#Session)  
 <a name="Session+request"></a>
 
 ### session.request : <code>http.IncomingMessage</code>
-An instance of http.IncomingMessage
+An instance of http.IncomingMessage.
 
 **Kind**: instance property of [<code>Session</code>](#Session)  
 **See**: [https://nodejs.org/api/http.html#http_class_http_incomingmessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage)  
@@ -1113,7 +1144,7 @@ The net.Socket object associated with the connection.
 <a name="Session+connection"></a>
 
 ### session.connection : <code>net.Socket</code>
-An alias of [socket](#Session+socket)
+An alias of [socket](#Session+socket).
 
 **Kind**: instance property of [<code>Session</code>](#Session)  
 <a name="Session+setTimeout"></a>
@@ -1429,6 +1460,7 @@ Create a WebSocket Server.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> |  |  |
+| [options.path] | <code>String</code> |  | see [path](#Server+path) |
 | [options.httpServer] | <code>http.Server</code> |  | see [httpServer](#Server+httpServer) |
 | [options.autoAccept] | <code>Boolean</code> | <code>true</code> | see [autoAccept](#Server+autoAccept) |
 | [sessionListener] | <code>function</code> |  | A listener for the 'session' event. |

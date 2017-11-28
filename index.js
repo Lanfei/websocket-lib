@@ -12,6 +12,7 @@ exports.Session = require('./lib/session');
 /**
  * Create a WebSocket Server.
  * @param  {Object}      [options]
+ * @param  {String}      [options.path]              see {@link Server#path}
  * @param  {http.Server} [options.httpServer]        see {@link Server#httpServer}
  * @param  {Boolean}     [options.autoAccept = true] see {@link Server#autoAccept}
  * @param  {Function}    [sessionListener]           A listener for the 'session' event.
