@@ -456,27 +456,27 @@ Return a buffer of the Frame instance.
 **Kind**: instance method of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_CONTINUATION"></a>
 
-### Frame.OPCODE_CONTINUATION
+### Frame.OPCODE\_CONTINUATION
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_TEXT"></a>
 
-### Frame.OPCODE_TEXT
+### Frame.OPCODE\_TEXT
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_BINARY"></a>
 
-### Frame.OPCODE_BINARY
+### Frame.OPCODE\_BINARY
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_CLOSE"></a>
 
-### Frame.OPCODE_CLOSE
+### Frame.OPCODE\_CLOSE
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_PING"></a>
 
-### Frame.OPCODE_PING
+### Frame.OPCODE\_PING
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Frame.OPCODE_PONG"></a>
 
-### Frame.OPCODE_PONG
+### Frame.OPCODE\_PONG
 **Kind**: static constant of [<code>Frame</code>](#Frame)  
 <a name="Receiver"></a>
 
@@ -1376,79 +1376,79 @@ Emitted when data is received.
 
 <a name="Session.STATE_CONNECTING"></a>
 
-### Session.STATE_CONNECTING
+### Session.STATE\_CONNECTING
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.STATE_OPEN"></a>
 
-### Session.STATE_OPEN
+### Session.STATE\_OPEN
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.STATE_CLOSING"></a>
 
-### Session.STATE_CLOSING
+### Session.STATE\_CLOSING
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.STATE_CLOSED"></a>
 
-### Session.STATE_CLOSED
+### Session.STATE\_CLOSED
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_NORMAL"></a>
 
-### Session.CLOSE_REASON_NORMAL
+### Session.CLOSE\_REASON\_NORMAL
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_GOING_AWAY"></a>
 
-### Session.CLOSE_REASON_GOING_AWAY
+### Session.CLOSE\_REASON\_GOING\_AWAY
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_PROTOCOL_ERROR"></a>
 
-### Session.CLOSE_REASON_PROTOCOL_ERROR
+### Session.CLOSE\_REASON\_PROTOCOL\_ERROR
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_UNSUPPORTED_DATA"></a>
 
-### Session.CLOSE_REASON_UNSUPPORTED_DATA
+### Session.CLOSE\_REASON\_UNSUPPORTED\_DATA
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_RESERVED"></a>
 
-### Session.CLOSE_REASON_RESERVED
+### Session.CLOSE\_REASON\_RESERVED
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_NO_STATUS"></a>
 
-### Session.CLOSE_REASON_NO_STATUS
+### Session.CLOSE\_REASON\_NO\_STATUS
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_ABNORMAL"></a>
 
-### Session.CLOSE_REASON_ABNORMAL
+### Session.CLOSE\_REASON\_ABNORMAL
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_INVALID_DATA"></a>
 
-### Session.CLOSE_REASON_INVALID_DATA
+### Session.CLOSE\_REASON\_INVALID\_DATA
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_POLICY_VIOLATION"></a>
 
-### Session.CLOSE_REASON_POLICY_VIOLATION
+### Session.CLOSE\_REASON\_POLICY\_VIOLATION
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_MESSAGE_TOO_BIG"></a>
 
-### Session.CLOSE_REASON_MESSAGE_TOO_BIG
+### Session.CLOSE\_REASON\_MESSAGE\_TOO\_BIG
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_EXTENSION_REQUIRED"></a>
 
-### Session.CLOSE_REASON_EXTENSION_REQUIRED
+### Session.CLOSE\_REASON\_EXTENSION\_REQUIRED
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_INTERNAL_SERVER_ERROR"></a>
 
-### Session.CLOSE_REASON_INTERNAL_SERVER_ERROR
+### Session.CLOSE\_REASON\_INTERNAL\_SERVER\_ERROR
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_SERVICE_RESTART"></a>
 
-### Session.CLOSE_REASON_SERVICE_RESTART
+### Session.CLOSE\_REASON\_SERVICE\_RESTART
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_TRY_AGAIN_LATER"></a>
 
-### Session.CLOSE_REASON_TRY_AGAIN_LATER
+### Session.CLOSE\_REASON\_TRY\_AGAIN\_LATER
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="Session.CLOSE_REASON_TLS_HANDSHAKE_FAILED"></a>
 
-### Session.CLOSE_REASON_TLS_HANDSHAKE_FAILED
+### Session.CLOSE\_REASON\_TLS\_HANDSHAKE\_FAILED
 **Kind**: static constant of [<code>Session</code>](#Session)  
 <a name="createServer"></a>
 

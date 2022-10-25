@@ -25,6 +25,6 @@
   },
   "homepage": "https://github.com/Lanfei/websocket-lib#readme",
   "devDependencies": {
-    "jsdoc-to-markdown": "^3.0.2"
+    "jsdoc-to-markdown": "^7.1.1"
   }
 }
